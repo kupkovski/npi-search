@@ -8,7 +8,7 @@ class SearchesController < ApplicationController
     # uri = URI("https://npiregistry.cms.hhs.gov/api/?number=#{params[:npi]}&enumeration_type=#{params[:npi_type]}&taxonomy_description=#{params[:taxonomy]}&first_name=#{params[:first_name]}&last_name=#{params[:last_name]}&city=#{params[:city]}&state=#{params[:state]}&postal_code=#{params[:postal_code]}&country_code=#{params[:country]}&version=2.1")
     # @api_response = Net::HTTP.get(uri)
      # 1127757462000
-    @api_response = {
+    @api_response = HashWithIndifferentAccess.new({
       "result_count": 1,
       "results": [
         {
@@ -79,7 +79,39 @@ class SearchesController < ApplicationController
           "other_names": []
         }
       ]
-    }
+    })
 
+    data = @api_response['results'].first
+    taxonomy = data['taxonomies'].first
+    address = data['addresses'].find {|a| a['address_purpose'].upcase == 'LOCATION' }
+
+    @npi = Npi.new.tap do |npi|
+      npi.number = data['number']
+      npi.enumeration_type = data['enumeration_type'] == 'NPI-1' ? 1 : 2
+
+      npi.taxonomy_code = taxonomy['code']
+      npi.taxonomy_group = taxonomy['taxonomy_group']
+      npi.taxonomy_description = taxonomy['desc']
+      npi.taxonomy_state = taxonomy['state']
+      npi.taxonomy_license = taxonomy['license']
+      npi.taxonomy_primary = taxonomy['primary']
+
+      npi.country = address['country_name']
+      npi.address_1 = address['address_1']
+      npi.city = address['city']
+      npi.state = address['state']
+      npi.postal_code = address['postal_code']
+
+      npi.first_name = data['basic']['first_name']
+      npi.last_name = data['basic']['last_name']
+      npi.gender = data['basic']['gender']
+    end
+
+    if @npi.save
+      redirect_to npis_path
+    else
+      flash[:alert] = @npi.errors.full_messages.join(',')
+      redirect_to action: :index
+    end
   end
 end

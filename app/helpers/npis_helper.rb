@@ -1,0 +1,2 @@
+module NpisHelper
+end

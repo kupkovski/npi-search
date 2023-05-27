@@ -4,5 +4,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "searches#index"
 
-  resource :search, only: %i[create show]
+  resource :search, only: %i[create]
+
+  resources :npis, only: %i[index]
 end

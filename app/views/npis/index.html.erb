@@ -1,0 +1,41 @@
+<table border=1>
+  <tr>
+    <th>NPI #</th>
+    <th>enumeration_type</th>
+    <th>taxonomy_code</th>
+    <th>taxonomy_group</th>
+    <th>taxonomy_description</th>
+    <th>taxonomy_state</th>
+    <th>taxonomy_license</th>
+    <th>taxonomy_primary</th>
+    <th>first_name</th>
+    <th>last_name</th>
+    <th>gender</th>
+    <th>country</th>
+    <th>address_1</th>
+    <th>city</th>
+    <th>state</th>
+    <th>postal_code</th>
+  </tr>
+
+  <% @npis.each do |npi| %>
+    <tr>
+      <td><%= npi.number %></td>
+      <td><%= npi.enumeration_type %></td>
+      <td><%= npi.taxonomy_code %></td>
+      <td><%= npi.taxonomy_group %></td>
+      <td><%= npi.taxonomy_description %></td>
+      <td><%= npi.taxonomy_state %></td>
+      <td><%= npi.taxonomy_license %></td>
+      <td><%= npi.taxonomy_primary %></td>
+      <td><%= npi.first_name %></td>
+      <td><%= npi.last_name %></td>
+      <td><%= npi.gender %></td>
+      <td><%= npi.country %></td>
+      <td><%= npi.address_1 %></td>
+      <td><%= npi.city %></td>
+      <td><%= npi.state %></td>
+      <td><%= npi.postal_code %></td>
+    </tr>
+  <% end %>
+</table>
