@@ -1,0 +1,40 @@
+<%= form_with url: search_path do |form| %>
+  <p>
+    <%= form.label :npi, 'NPI' %>
+    <%= form.text_field :npi %>
+  </p>
+  <p>
+    <%= form.label :npi_type, 'NPI Type' %>
+    <%= form.select :npi_type, [1, 2] %>
+  </p>
+  <p>
+    <%= form.label :first_name, 'First Name' %>
+    <%= form.text_field :first_name %>
+  </p>
+  <p>
+    <%= form.label :last_name, 'Last Name' %>
+    <%= form.text_field :last_name %>
+  </p>
+  <p>
+    <%= form.label :city, 'City' %>
+    <%= form.text_field :city %>
+  </p>
+  <p>
+    <%= form.label :state, 'State' %>
+    <%= form.select :state, state_options %>
+  </p>
+  <p>
+    <%= form.label :postal_code, 'Postal Code' %>
+    <%= form.text_field :postal_code %>
+  </p>
+  <p>
+    <%= form.label :country, 'Country Code' %>
+    <%= form.select :country, country_options %>
+  </p>
+  <p>
+    <%= form.label :taxonomy, 'taxonomy' %>
+    <%= form.text_field :taxonomy %>
+  </p>
+
+  <%= form.submit "Search" %>
+<% end %>
