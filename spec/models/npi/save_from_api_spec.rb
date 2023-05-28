@@ -17,6 +17,81 @@ RSpec.describe Npi::SaveFromApi do
     )
   }
 
+  let(:mocked_response) do
+    {
+      "result_count": 1,
+      "results": [
+        {
+          "created_epoch": "1127757462000",
+          "enumeration_type": "NPI-1",
+          "last_updated_epoch": "1326893645000",
+          "number": "1003802901",
+          "addresses": [
+            {
+              "country_code": "US",
+              "country_name": "United States",
+              "address_purpose": "MAILING",
+              "address_type": "DOM",
+              "address_1": "629D LOWTHER RD",
+              "city": "LEWISBERRY",
+              "state": "PA",
+              "postal_code": "173399527",
+              "telephone_number": "717-932-5200",
+              "fax_number": "717-932-3095"
+            },
+            {
+              "country_code": "US",
+              "country_name": "United States",
+              "address_purpose": "LOCATION",
+              "address_type": "DOM",
+              "address_1": "629D LOWTHER RD",
+              "city": "LEWISBERRY",
+              "state": "PA",
+              "postal_code": "173399527",
+              "telephone_number": "717-932-5200",
+              "fax_number": "717-932-3095"
+            }
+          ],
+          "practiceLocations": [],
+          "basic": {
+            "first_name": "NEETI",
+            "last_name": "GOEL",
+            "middle_name": "BHATIA",
+            "credential": "MD",
+            "sole_proprietor": "NO",
+            "gender": "F",
+            "enumeration_date": "2005-09-26",
+            "last_updated": "2012-01-18",
+            "status": "A",
+            "name_prefix": "Dr.",
+            "name_suffix": "--"
+          },
+          "taxonomies": [
+            {
+              "code": "2085R0202X",
+              "taxonomy_group": "",
+              "desc": "Radiology, Diagnostic Radiology",
+              "state": "PA",
+              "license": "MD424020",
+              "primary": true
+            }
+          ],
+          "identifiers": [
+            {
+              "code": "05",
+              "desc": "MEDICAID",
+              "issuer": nil,
+              "identifier": "101015234",
+              "state": "PA"
+            }
+          ],
+          "endpoints": [],
+          "other_names": []
+        }
+      ]
+    }.to_json
+  end
+
   subject { described_class.new(attributes: params) }
 
   describe '#call' do
@@ -33,81 +108,6 @@ RSpec.describe Npi::SaveFromApi do
     context 'when there is no NPI record with sutch given number' do
       let(:http_response) { double('http_response') }
       context 'and API returns success' do
-        let(:mocked_response) do
-          {
-            "result_count": 1,
-            "results": [
-              {
-                "created_epoch": "1127757462000",
-                "enumeration_type": "NPI-1",
-                "last_updated_epoch": "1326893645000",
-                "number": "1003802901",
-                "addresses": [
-                  {
-                    "country_code": "US",
-                    "country_name": "United States",
-                    "address_purpose": "MAILING",
-                    "address_type": "DOM",
-                    "address_1": "629D LOWTHER RD",
-                    "city": "LEWISBERRY",
-                    "state": "PA",
-                    "postal_code": "173399527",
-                    "telephone_number": "717-932-5200",
-                    "fax_number": "717-932-3095"
-                  },
-                  {
-                    "country_code": "US",
-                    "country_name": "United States",
-                    "address_purpose": "LOCATION",
-                    "address_type": "DOM",
-                    "address_1": "629D LOWTHER RD",
-                    "city": "LEWISBERRY",
-                    "state": "PA",
-                    "postal_code": "173399527",
-                    "telephone_number": "717-932-5200",
-                    "fax_number": "717-932-3095"
-                  }
-                ],
-                "practiceLocations": [],
-                "basic": {
-                  "first_name": "NEETI",
-                  "last_name": "GOEL",
-                  "middle_name": "BHATIA",
-                  "credential": "MD",
-                  "sole_proprietor": "NO",
-                  "gender": "F",
-                  "enumeration_date": "2005-09-26",
-                  "last_updated": "2012-01-18",
-                  "status": "A",
-                  "name_prefix": "Dr.",
-                  "name_suffix": "--"
-                },
-                "taxonomies": [
-                  {
-                    "code": "2085R0202X",
-                    "taxonomy_group": "",
-                    "desc": "Radiology, Diagnostic Radiology",
-                    "state": "PA",
-                    "license": "MD424020",
-                    "primary": true
-                  }
-                ],
-                "identifiers": [
-                  {
-                    "code": "05",
-                    "desc": "MEDICAID",
-                    "issuer": nil,
-                    "identifier": "101015234",
-                    "state": "PA"
-                  }
-                ],
-                "endpoints": [],
-                "other_names": []
-              }
-            ]
-          }.to_json
-        end
-
         it 'creates a new NPI record' do
           expect(Net::HTTP)
             .to receive(:get_response)
@@ -203,6 +203,40 @@ RSpec.describe Npi::SaveFromApi do
             {
               success: false,
               errors: 'No NPI records found for the given parameters.'
+            }
+          )
+        end
+      end
+
+      context 'and API returns 200 with no errors but saving fails' do
+        let(:npi_factory) { double(:npi_factory) }
+        let!(:npi) { FactoryBot.create(:npi, number: '321321') }
+
+        it 'returns the API error' do
+          expect(Net::HTTP)
+            .to receive(:get_response)
+            .and_return http_response
+
+          expect(http_response)
+            .to receive(:code)
+            .and_return('200')
+
+          expect(http_response)
+            .to receive(:body)
+            .and_return(mocked_response)
+
+          expect(Npi::Factory)
+            .to receive(:new)
+            .and_return(npi_factory)
+
+          expect(npi_factory)
+            .to receive(:call)
+            .and_return FactoryBot.build(:npi, number: npi.number)
+
+          expect(subject.call).to eq(
+            {
+              success: false,
+              errors: ['Number has already been taken']
             }
           )
         end
