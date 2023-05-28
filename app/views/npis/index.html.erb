@@ -1,41 +1,62 @@
-<table border=1>
-  <tr>
-    <th>NPI #</th>
-    <th>enumeration_type</th>
-    <th>taxonomy_code</th>
-    <th>taxonomy_group</th>
-    <th>taxonomy_description</th>
-    <th>taxonomy_state</th>
-    <th>taxonomy_license</th>
-    <th>taxonomy_primary</th>
-    <th>first_name</th>
-    <th>last_name</th>
-    <th>gender</th>
-    <th>country</th>
-    <th>address_1</th>
-    <th>city</th>
-    <th>state</th>
-    <th>postal_code</th>
-  </tr>
+<div class="container-fluid p-4">
+  <div class="mb-3">
+    <%= link_to 'Search', root_path %>
+  </div>
+  <h1>List of already searched NPIs</h1>
 
-  <% @npis.each do |npi| %>
-    <tr>
-      <td><%= npi.number %></td>
-      <td><%= npi.enumeration_type %></td>
-      <td><%= npi.taxonomy_code %></td>
-      <td><%= npi.taxonomy_group %></td>
-      <td><%= npi.taxonomy_description %></td>
-      <td><%= npi.taxonomy_state %></td>
-      <td><%= npi.taxonomy_license %></td>
-      <td><%= npi.taxonomy_primary %></td>
-      <td><%= npi.first_name %></td>
-      <td><%= npi.last_name %></td>
-      <td><%= npi.gender %></td>
-      <td><%= npi.country %></td>
-      <td><%= npi.address_1 %></td>
-      <td><%= npi.city %></td>
-      <td><%= npi.state %></td>
-      <td><%= npi.postal_code %></td>
-    </tr>
+  <% if @npis.blank? %>
+    <p>No valid NPIs searches yet.
+      <%= link_to 'Make your first search', root_path %>
+    </p>
+  <% else %>
+    <table class="table table-striped table-bordered">
+      <tr>
+        <th colspan=2 class="text-center">NPI</th>
+        <th colspan=6 class="text-center">Taxonomy</th>
+        <th colspan=3 class="text-center">Basic Info</th>
+        <th colspan=5 class="text-center">Address</th>
+      </tr>
+      <tr>
+        <th>NPI #</th>
+        <th>Type</th>
+        <th>Code</th>
+        <th>Group</th>
+        <th>Description</th>
+        <th>State</th>
+        <th>License</th>
+        <th>Primary?</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Gender</th>
+        <th>Country</th>
+        <th>Address</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Postal Code</th>
+      </tr>
+
+      <% @npis.each do |npi| %>
+        <tr>
+          <td><%= npi.number %></td>
+          <td><%= npi.enumeration_description %></td>
+          <td><%= npi.taxonomy_code %></td>
+          <td><%= npi.taxonomy_group %></td>
+          <td><%= npi.taxonomy_description %></td>
+          <td><%= npi.taxonomy_state %></td>
+          <td><%= npi.taxonomy_license %></td>
+          <td><%= npi.taxonomy_primary %></td>
+          <td><%= npi.first_name %></td>
+          <td><%= npi.last_name %></td>
+          <td class="text-center"><%= npi.gender %></td>
+          <td><%= npi.country %></td>
+          <td><%= npi.address_1 %></td>
+          <td><%= npi.city %></td>
+          <td class="text-center"><%= npi.state %></td>
+          <td><%= npi.postal_code %></td>
+        </tr>
+      <% end %>
+    </table>
+
+    <%= paginate @npis %>
   <% end %>
-</table>
+</div>

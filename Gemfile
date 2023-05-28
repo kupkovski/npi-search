@@ -32,4 +32,8 @@ group :development do
   # gem "spring"
 end
 
+gem "bootstrap", "~> 5.2"
 
+gem "vite_rails", "~> 3.0"
+
+gem "kaminari", "~> 1.2"

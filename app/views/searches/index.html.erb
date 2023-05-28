@@ -1,40 +1,44 @@
-<%= form_with url: search_path do |form| %>
-  <p>
-    <%= form.label :npi, 'NPI' %>
-    <%= form.text_field :npi %>
-  </p>
-  <p>
-    <%= form.label :npi_type, 'NPI Type' %>
-    <%= form.select :npi_type, [1, 2] %>
-  </p>
-  <p>
-    <%= form.label :first_name, 'First Name' %>
-    <%= form.text_field :first_name %>
-  </p>
-  <p>
-    <%= form.label :last_name, 'Last Name' %>
-    <%= form.text_field :last_name %>
-  </p>
-  <p>
-    <%= form.label :city, 'City' %>
-    <%= form.text_field :city %>
-  </p>
-  <p>
-    <%= form.label :state, 'State' %>
-    <%= form.select :state, state_options %>
-  </p>
-  <p>
-    <%= form.label :postal_code, 'Postal Code' %>
-    <%= form.text_field :postal_code %>
-  </p>
-  <p>
-    <%= form.label :country, 'Country Code' %>
-    <%= form.select :country, country_options %>
-  </p>
-  <p>
-    <%= form.label :taxonomy, 'taxonomy' %>
-    <%= form.text_field :taxonomy %>
-  </p>
+<div class="container-fluid">
+  <h1>Search NPI</h1>
 
-  <%= form.submit "Search" %>
-<% end %>
+  <%= form_with url: search_path do |form| %>
+    <div class="mb-3">
+      <%= form.label :npi, 'NPI number', class: 'required form-label' %>
+      <%= form.text_field :npi, required: true, class: "form-control" %>
+    </div>
+    <div class="mb-3">
+      <%= form.label :npi_type, 'NPI Type', class: "form-label" %>
+      <%= form.select :npi_type, npi_type_options, {}, { class: "form-select form-select-md" } %>
+    </div>
+    <div class="mb-3">
+      <%= form.label :first_name, 'First Name', class: "form-label" %>
+      <%= form.text_field :first_name, class: "form-control" %>
+    </div>
+    <div class="mb-3">
+      <%= form.label :last_name, 'Last Name', class: "form-label" %>
+      <%= form.text_field :last_name, class: "form-control" %>
+    </div>
+    <div class="mb-3">
+      <%= form.label :city, 'City', class: "form-label" %>
+      <%= form.text_field :city, class: "form-control" %>
+    </div>
+    <div class="mb-3">
+      <%= form.label :state, 'State', class: "form-label" %>
+      <%= form.select :state, state_options, {}, { class: "form-select form-select-md" } %>
+    </div>
+    <div class="mb-3">
+      <%= form.label :postal_code, 'Postal Code', class: "form-label" %>
+      <%= form.text_field :postal_code, class: "form-control" %>
+    </div>
+    <div class="mb-3">
+      <%= form.label :country, 'Country Code', class: "form-label" %>
+      <%= form.select :country, country_options, {}, { class: "form-select form-select-md" } %>
+    </div>
+    <div class="mb-3">
+      <%= form.label :taxonomy, 'taxonomy', class: "form-label" %>
+      <%= form.text_field :taxonomy, class: "form-control" %>
+    </div>
+
+    <%= form.submit "Search" %>
+  <% end %>
+</div>

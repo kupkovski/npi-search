@@ -1,0 +1,12 @@
+.flash-alert {
+   font-weight: bold;
+   border: 2px solid #DC3545;
+   padding: 8px;
+   background-color: #F8D7DA;
+}
+
+label.required {
+  color: red;
+}
+
+

@@ -1,7 +1,7 @@
 module SearchHelper
   def state_options
     [
-      ['Any', '',    ],
+      ['Any', ''],
       ['ALABAMA ', '1: AL'],
       ['ALASKA ', '2: AK'],
       ['AMERICAN SAMOA ', '3: AS'],
@@ -294,6 +294,14 @@ module SearchHelper
       ["Yemen", "235: YE"],
       ["Zambia", "236: ZM"],
       ["Zimbabwe", "237: ZW"],
+    ]
+  end
+
+  def npi_type_options
+    [
+      ['Any', ''],
+      ['NPI-1', 1],
+      ['NPI-2', 2]
     ]
   end
 end
