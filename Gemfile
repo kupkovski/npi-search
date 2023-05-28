@@ -25,6 +25,7 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "rspec"
   gem "rspec-rails"
+  gem "rubocop", "~> 1.51"
 end
 
 group :development do
@@ -33,7 +34,7 @@ group :development do
 end
 
 gem "bootstrap", "~> 5.2"
-
 gem "vite_rails", "~> 3.0"
-
 gem "kaminari", "~> 1.2"
+
+
