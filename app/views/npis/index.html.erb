@@ -38,7 +38,7 @@
       <% @npis.each do |npi| %>
         <tr>
           <td><%= npi.number %></td>
-          <td><%= npi.enumeration_description %></td>
+          <td><%= enumeration_description(npi) %></td>
           <td><%= npi.taxonomy_code %></td>
           <td><%= npi.taxonomy_group %></td>
           <td><%= npi.taxonomy_description %></td>

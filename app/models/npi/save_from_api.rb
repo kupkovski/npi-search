@@ -12,22 +12,32 @@ class Npi::SaveFromApi
   def call
     existing_npi = Npi.find_by(number: attributes[:npi])
 
-    if existing_npi.present?
-      existing_npi.touch
-      { success: true }
-    else
-      api_response = Npi::ApiHandler.new(attributes:).call
-      return { success: false, errors: api_response[:errors] } if api_response[:success] == false
+    return update_existing_npi(existing_npi) if existing_npi.present?
 
-      api_response_body = api_response[:api_response_body]
-      new_npi = Npi::Factory.new(attributes: api_response_body).call
-      return { success: true } if new_npi.save
+    return { success: false, errors: api_response[:errors] } if api_response[:success] == false
 
-      { success: false, errors: new_npi.errors.full_messages }
-    end
+    new_npi = build_npi_record(api_response)
+    return { success: true } if new_npi.save
+
+    { success: false, errors: new_npi.errors.full_messages }
   end
 
   private
+
+  def update_existing_npi(existing_npi)
+    existing_npi.touch
+    { success: true }
+  end
+
+  def api_response
+    @api_response ||= Npi::ApiHandler.new(attributes:).call
+  end
+
+  def build_npi_record(api_response)
+    api_response_body = api_response[:api_response_body]
+
+    Npi::Factory.new(attributes: api_response_body).call
+  end
 
   attr_reader :attributes
 end

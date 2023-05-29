@@ -234,6 +234,8 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    shoulda-matchers (5.3.0)
+      activesupport (>= 5.2.0)
     sprockets (4.2.0)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -276,6 +278,7 @@ DEPENDENCIES
   rspec
   rspec-rails
   rubocop (~> 1.51)
+  shoulda-matchers (~> 5.3)
   sprockets-rails
   sqlite3 (~> 1.4)
   tzinfo-data

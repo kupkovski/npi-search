@@ -1,0 +1,6 @@
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+AllCops:
+  NewCops: enable
+
